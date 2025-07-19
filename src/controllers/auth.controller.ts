@@ -22,10 +22,10 @@ export const registerUser = async (req: Request, res: Response) => {
 };
 
 export const loginUser = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
+  const { username, password, userProfileTypeCode } = req.body;
 
   try {
-    const token = await login(username, password);
+    const token = await login(username, password, userProfileTypeCode);
     res.json({ token });
   } catch (e: any) {
     res.status(400).json({ error: e.message });
