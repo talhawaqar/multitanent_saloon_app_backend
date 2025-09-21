@@ -6,6 +6,7 @@ export const createServicesLinks = async (services: ServiceLinkType[] = []) => {
   if (!services.length) {
     return;
   }
+  console.log("service service", services);
   await prisma.businessEntityServiceLink.createMany({ data: services });
 };
 
@@ -17,23 +18,30 @@ export const activeServices = async () => {
         status: ModelStatus.Active,
       },
     },
-    category: true,
+    include: {
+      category: true,
+    },
   });
 
   return activeServices;
 };
 
 export const allServices = async () => {
-  const activeServices = await prisma.service.findMany({
-    category: true,
+  const services = await prisma.service.findMany({
+    include: {
+      category: true,
+    },
   });
 
-  return activeServices;
+  return services;
 };
 
 export const createService = async (service: ServiceType) => {
   const createdService = await prisma.service.create({
     data: service,
+    include: {
+      category: true,
+    },
   });
 
   return createdService;
@@ -42,7 +50,14 @@ export const createService = async (service: ServiceType) => {
 export const updateService = async (service: ServiceType) => {
   const updatedService = await prisma.service.update({
     where: { id: service.id },
-    data: service,
+    data: {
+      name: service.name,
+      description: service.description,
+      status: service.status,
+    },
+    include: {
+      category: true,
+    },
   });
 
   return updatedService;

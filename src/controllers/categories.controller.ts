@@ -22,7 +22,8 @@ export const update = async (req: Request, res: Response) => {
 };
 
 export const getAllCategories = async (req: Request, res: Response) => {
-  const categories = allCategories();
+  console.log("I am in");
+  const categories = await allCategories();
 
   res.json({ categories });
 };

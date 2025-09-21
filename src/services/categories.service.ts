@@ -3,7 +3,7 @@ import { ModelStatus } from "../constants";
 import { CategoryType } from "../types";
 
 export const createCategory = async (category: CategoryType) => {
-  const createdCategory = prisma.category.create({
+  const createdCategory = prisma.serviceCategory.create({
     data: category,
   });
 
@@ -11,7 +11,7 @@ export const createCategory = async (category: CategoryType) => {
 };
 
 export const updateCategory = async (category: CategoryType) => {
-  const updatedcategory = await prisma.category.update({
+  const updatedcategory = await prisma.serviceCategory.update({
     where: { id: category.id },
     data: category,
   });
@@ -20,12 +20,12 @@ export const updateCategory = async (category: CategoryType) => {
 };
 
 export const allCategories = async () => {
-  const categories = await prisma.categories.findMany();
+  const categories = await prisma.serviceCategory.findMany();
   return categories;
 };
 
 export const activeCategories = async () => {
-  const categories = await prisma.categories.findMany({
+  const categories = await prisma.serviceCategory.findMany({
     where: {
       status: ModelStatus.Active,
     },

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { UserType, BusinessEntityType } from "../types";
+import { UserType, BusinessEntityType, LocationFiles } from "../types";
 import { login, register } from "../services/auth.service";
 
 export const registerUser = async (req: Request, res: Response) => {
@@ -8,13 +8,29 @@ export const registerUser = async (req: Request, res: Response) => {
     userProfileTypeCode,
     businessEntity,
   }: {
-    user: UserType;
+    user: string;
     userProfileTypeCode: string;
-    businessEntity?: BusinessEntityType;
+    businessEntity?: string;
   } = req.body;
 
+  const parsedUser: UserType = JSON.parse(user);
+  let parsedBusinessEntity: BusinessEntityType | undefined = undefined;
+
+  if (businessEntity) {
+    parsedBusinessEntity = JSON.parse(businessEntity);
+  }
+
+  console.log(parsedBusinessEntity?.services);
+
+  const files = req.files as LocationFiles;
+
   try {
-    const token = await register({ user, userProfileTypeCode, businessEntity });
+    const token = await register({
+      user: parsedUser,
+      userProfileTypeCode,
+      businessEntity: parsedBusinessEntity,
+      files,
+    });
     res.json({ token });
   } catch (e: any) {
     res.status(400).json({ error: e.message });
@@ -22,12 +38,12 @@ export const registerUser = async (req: Request, res: Response) => {
 };
 
 export const loginUser = async (req: Request, res: Response) => {
-  const { username, password, userProfileTypeCode } = req.body;
+  const { username, password } = req.body;
 
   try {
-    const token = await login(username, password, userProfileTypeCode);
-    res.json({ token });
+    const { token, userProfileTypeCode } = await login(username, password);
+    res.json({ token, userProfileTypeCode });
   } catch (e: any) {
-    res.status(400).json({ error: e.message });
+    res.status(401).json({ error: e.message });
   }
 };
