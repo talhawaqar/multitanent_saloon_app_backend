@@ -9,29 +9,28 @@ import {
 import { ServiceType } from "../types";
 
 export const getActiveServices = async (req: Request, res: Response) => {
-  const services = activeServices();
+  const services = await activeServices();
 
   res.json(services);
 };
 
 export const getAllServices = async (req: Request, res: Response) => {
-  const services = allServices();
+  const services = await allServices();
 
   res.json(services);
 };
 
 export const create = async (req: Request, res: Response) => {
   const { service }: { service: ServiceType } = req.body;
-  const createdService = createService(service);
+  const createdService = await createService(service);
 
-  res.json(createdService);
+  res.json({ createdService });
 };
 
 export const update = async (req: Request, res: Response) => {
   const { service }: { service: ServiceType } = req.body;
-  const updatedService = updateService(service);
-
-  res.json(updatedService);
+  const updatedService = await updateService(service);
+  res.json({ updatedService });
 };
 
 export const getServicesByCategoryId = async (req: Request, res: Response) => {
@@ -40,5 +39,3 @@ export const getServicesByCategoryId = async (req: Request, res: Response) => {
 
   res.json(services);
 };
-
-

@@ -11,6 +11,10 @@ export const enum BusinessEntityStatus {
   Suspended = "suspended",
 }
 
+export const enum FileLInkType {
+  Location = "Location",
+}
+
 export enum ModelStatus {
   Active = "active",
   InActive = "inactive",
